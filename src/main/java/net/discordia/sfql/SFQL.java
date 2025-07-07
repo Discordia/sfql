@@ -3,12 +3,10 @@ package net.discordia.sfql;
 import net.discordia.sfql.eval.VariableLookup;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
-import net.discordia.sfql.reduce.ExpressionReducer;
 import net.discordia.sfql.domain.VariableUniverse;
 
 public class SFQL {
     private final LogicShuntingYardParser parser = new LogicShuntingYardParser();
-    private final ExpressionReducer reducer = new ExpressionReducer();
 
     /**
      * Check if an expression can be parsed.
@@ -18,8 +16,8 @@ public class SFQL {
      */
     public boolean parsable(String expr, VariableUniverse variableUniverse) {
         try {
-            var eval = parser.parse(expr);
-            return eval.verify(variableUniverse);
+            var evaluator = parser.parse(expr);
+            return evaluator.verify(variableUniverse);
         } catch (InvalidExpressionException e) {
             return false;
         }
@@ -35,7 +33,8 @@ public class SFQL {
      * @return the reduced expression
      */
     public String reduceToDefaultQuery(String expr, VariableUniverse variableUniverse) {
-        return reducer.reduce(expr, variableUniverse);
+        var evaluator = parser.parse(expr);
+        return evaluator.reduce(variableUniverse);
     }
 
     /**
@@ -46,7 +45,7 @@ public class SFQL {
      * @return true if expression evaluate to true with the provided variable lookup
      */
     public boolean eval(String expr, VariableLookup variableLookup) {
-        var eval = parser.parse(expr);
-        return eval.eval(variableLookup);
+        var evaluator = parser.parse(expr);
+        return evaluator.eval(variableLookup);
     }
 }

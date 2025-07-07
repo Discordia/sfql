@@ -1,9 +1,11 @@
 package net.discordia.sfql;
 
+import net.discordia.sfql.domain.ReducedVariableUniverse;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SFQLUseCaseTests {
@@ -15,8 +17,8 @@ public class SFQLUseCaseTests {
     @Test
     public void testEvalComplexLogicalExpression() {
         String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR avgv10 > 200000) AND c + c > 10)";
-        var eval = new SFQL();
-        var result = eval.eval(query, new VariableLookupStub());
+        var sfql = new SFQL();
+        var result = sfql.eval(query, new VariableLookupStub());
         assertTrue(result);
     }
 
@@ -24,8 +26,8 @@ public class SFQLUseCaseTests {
     @Test
     public void testEvalComplexLogicalExpressionWithPrefixMinus() {
         String query = "v > v1 AND ((o - c1) /c1) < -0.06";
-        var eval = new SFQL();
-        var result = eval.eval(query, new VariableLookupStub());
+        var sfql = new SFQL();
+        var result = sfql.eval(query, new VariableLookupStub());
         assertTrue(result);
     }
 
@@ -37,11 +39,34 @@ public class SFQLUseCaseTests {
         assertThat(variables).containsExactlyInAnyOrder("c", "h1", "v", "v1", "avgv10");
     }
 
+
     //
-    // Verify
+    // Parsable
     //
 
+    @Test
+    public void testParsableQuery() {
+        String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR avgv10 > 200000) AND c + c > 10)";
+        var eval = new SFQL();
+        var result = eval.parsable(query, ReducedVariableUniverse.create());
+        assertTrue(result);
+    }
 
+    @Test
+    public void testNonParsableQuery_missingParenthesis() {
+        String query = "(c + 1 > (h1 + 2) AND ((v > v1 OR avgv10 > 200000) AND c + c > 10)";
+        var eval = new SFQL();
+        var result = eval.parsable(query, ReducedVariableUniverse.create());
+        assertFalse(result);
+    }
+
+    @Test
+    public void testNonParsableQuery_unknowVariable() {
+        String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR ph > 200000) AND c + c > 10)";
+        var eval = new SFQL();
+        var result = eval.parsable(query, ReducedVariableUniverse.create());
+        assertFalse(result);
+    }
 
 
     //

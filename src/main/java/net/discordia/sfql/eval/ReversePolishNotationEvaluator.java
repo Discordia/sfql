@@ -1,11 +1,11 @@
 package net.discordia.sfql.eval;
 
-import net.discordia.sfql.domain.VariableUniverse;
-
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
+import net.discordia.sfql.domain.VariableUniverse;
 import static java.math.RoundingMode.HALF_UP;
 
 public class ReversePolishNotationEvaluator {
@@ -40,8 +40,16 @@ public class ReversePolishNotationEvaluator {
         return Boolean.parseBoolean(stack.pop());
     }
 
-    public boolean verify(List<String> tokens, VariableUniverse variableUniverse) {
-        return false;
+    public Boolean verify(final List<String> tokens, final VariableUniverse variableUniverse) {
+        for (String token : tokens) {
+            if (isNotOperator(token) && isNotNumber(token)) {
+                if (!variableUniverse.contains(token)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private boolean evalInternal(String token, Stack<String> stack, VariableLookup variableLookup) {
@@ -96,5 +104,12 @@ public class ReversePolishNotationEvaluator {
                !Objects.equals(token, "<");
     }
 
-
+    private boolean isNotNumber(final String token) {
+        try {
+            new BigDecimal(token);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
+        }
+    }
 }

@@ -62,6 +62,10 @@ public class LogicReversePolishNotationEvaluator {
         return results.stream().allMatch(p -> p == true);
     }
 
+    public String reduce(VariableUniverse variableUniverse) {
+        return "";
+    }
+
     private static boolean isLogicalOperator(final List<String> tokens) {
         return isAnd(tokens) || isOr(tokens);
     }
