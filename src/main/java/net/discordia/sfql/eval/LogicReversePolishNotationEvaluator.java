@@ -7,6 +7,9 @@ import java.util.Stack;
 
 import net.discordia.sfql.domain.VariableUniverse;
 import net.discordia.sfql.parse.InvalidExpressionException;
+import static net.discordia.sfql.eval.EvalUtil.isAnd;
+import static net.discordia.sfql.eval.EvalUtil.isNotLogicalOperator;
+import static net.discordia.sfql.eval.EvalUtil.isOr;
 
 public class LogicReversePolishNotationEvaluator {
     private final ArrayList<List<String>> expr;
@@ -25,7 +28,7 @@ public class LogicReversePolishNotationEvaluator {
         var eval = new ReversePolishNotationEvaluator();
 
         for (List<String> tokens : expr) {
-            if (!isLogicalOperator(tokens)) {
+            if (isNotLogicalOperator(tokens)) {
                 var result = eval.eval(tokens, variableLookup);
                 stack.push(result);
             } else if (isAnd(tokens)) {
@@ -51,7 +54,7 @@ public class LogicReversePolishNotationEvaluator {
         var results = new ArrayList<Boolean>();
 
         for (List<String> tokens : expr) {
-            if (!isLogicalOperator(tokens)) {
+            if (isNotLogicalOperator(tokens)) {
                 var result = eval.verify(tokens, variableUniverse);
                 results.add(result);
             } else if (!isAnd(tokens) && !isOr(tokens)) {
@@ -62,19 +65,24 @@ public class LogicReversePolishNotationEvaluator {
         return results.stream().allMatch(p -> p == true);
     }
 
-    public String reduce(VariableUniverse variableUniverse) {
-        return "";
-    }
+    public InfixExpr reduce(VariableUniverse variableUniverse) {
+        var eval = new ReversePolishNotationEvaluator();
+       List<List<String>> reduced = new ArrayList<>();
 
-    private static boolean isLogicalOperator(final List<String> tokens) {
-        return isAnd(tokens) || isOr(tokens);
-    }
+        for (List<String> tokens : expr) {
+            if (isNotLogicalOperator(tokens)) {
+                if (eval.verify(tokens, variableUniverse)) {
+                    reduced.add(tokens);
+                } else {
+                    reduced.add(List.of("invalid"));
+                }
+            } else if (isAnd(tokens) || isOr(tokens)) {
+                reduced.add(tokens);
+            } else {
+                throw new InvalidExpressionException("Invalid logical expression");
+            }
+        }
 
-    private static boolean isOr(final List<String> tokens) {
-        return tokens.equals(List.of("or"));
-    }
-
-    private static boolean isAnd(final List<String> tokens) {
-        return tokens.equals(List.of("and"));
+        return new InfixExpr(reduced);
     }
 }

@@ -1,12 +1,12 @@
 package net.discordia.sfql.eval;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Stack;
 import net.discordia.sfql.domain.VariableUniverse;
 import static java.math.RoundingMode.HALF_UP;
+import static net.discordia.sfql.eval.EvalUtil.isNotNumber;
+import static net.discordia.sfql.eval.EvalUtil.isNotOperator;
 
 public class ReversePolishNotationEvaluator {
 
@@ -93,23 +93,5 @@ public class ReversePolishNotationEvaluator {
         }
 
         return false;
-    }
-
-    private static boolean isNotOperator(final String token) {
-        return !Objects.equals(token, "+") &&
-               !Objects.equals(token, "-") &&
-               !Objects.equals(token, "*") &&
-               !Objects.equals(token, "/") &&
-               !Objects.equals(token, ">") &&
-               !Objects.equals(token, "<");
-    }
-
-    private boolean isNotNumber(final String token) {
-        try {
-            new BigDecimal(token);
-            return false;
-        } catch (NumberFormatException e) {
-            return true;
-        }
     }
 }

@@ -72,4 +72,12 @@ public class SFQLUseCaseTests {
     //
     // Reduce
     //
+
+    @Test
+    public void testReduceQuery() {
+        String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR ph > 200000) AND c + c > 10)";
+        var eval = new SFQL();
+        var result = eval.reduceToDefaultQuery(query, ReducedVariableUniverse.create());
+        System.out.println(result);
+    }
 }

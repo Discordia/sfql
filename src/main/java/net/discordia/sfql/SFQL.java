@@ -34,7 +34,8 @@ public class SFQL {
      */
     public String reduceToDefaultQuery(String expr, VariableUniverse variableUniverse) {
         var evaluator = parser.parse(expr);
-        return evaluator.reduce(variableUniverse);
+        var infixExpr = evaluator.reduce(variableUniverse);
+        return infixExpr.toInfixString();
     }
 
     /**
