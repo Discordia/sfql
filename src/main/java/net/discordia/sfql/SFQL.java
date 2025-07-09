@@ -1,6 +1,6 @@
 package net.discordia.sfql;
 
-import net.discordia.sfql.eval.VariableLookup;
+import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
 import net.discordia.sfql.domain.VariableUniverse;
