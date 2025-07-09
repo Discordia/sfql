@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.domain.VariableUniverse;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import static net.discordia.sfql.eval.EvalUtil.isAnd;

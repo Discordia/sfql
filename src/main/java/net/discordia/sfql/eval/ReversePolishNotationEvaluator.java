@@ -3,6 +3,7 @@ package net.discordia.sfql.eval;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Stack;
+import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.domain.VariableUniverse;
 import static java.math.RoundingMode.HALF_UP;
 import static net.discordia.sfql.eval.EvalUtil.isNotNumber;
@@ -33,6 +34,7 @@ public class ReversePolishNotationEvaluator {
                         result = String.valueOf(value);
                         stack.push(result);
                         break;
+                    // TODO: =  ???
                 }
             }
         }
