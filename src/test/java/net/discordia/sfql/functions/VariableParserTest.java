@@ -40,7 +40,7 @@ public class VariableParserTest {
         var avgc21Dot1Expected = new FunctionContext("adr42.3", "adr", "", 42, 3);
         assertThat(avgc21Dot1Result).isEqualTo(avgc21Dot1Expected);
     }
-    
+
     @Test
     public void testParse_atr() {
         var avgc21Result = variableParser.parse("atr5");
