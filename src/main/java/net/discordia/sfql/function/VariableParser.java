@@ -1,15 +1,22 @@
 package net.discordia.sfql.function;
 
+import java.util.Arrays;
+import java.util.regex.Pattern;
 import net.discordia.sfql.domain.OHLCV;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class VariableParser {
+    private static final String VARIABLE_REGEX = "([a-zA-Z]+)(\\d*)";
+
+    private final Pattern variablePattern;
+
     public VariableParser() {
+        this.variablePattern = Pattern.compile(VARIABLE_REGEX);
     }
 
     // TODO: input - list of known functions?
 
-    public static FunctionContext parse(String variable) {
+    public FunctionContext parse(String variable) {
         // If is number just return a number function
         if (NumberUtils.isParsable(variable)) {
             return new FunctionContext(variable, "digit", "digit", 0, 0);
@@ -23,24 +30,45 @@ public class VariableParser {
         var dotParts = variable.split("\\.");
         var fromDaysAgo = dotParts.length == 2 ? Integer.parseInt(dotParts[1]) : 0;
 
-        // 2. Parse from behind a character at the time as long as they are digits, this is the period
-        var variableLeft = dotParts[0];
-        var position = variableLeft.length() - 1;
-        var period = 0;
+        // 2. Parse letters and digits out from variable
+        var matcher = variablePattern.matcher(dotParts[0]);
 
-        for (int i = variableLeft.length() - 1; i >= 0; i--) {
-            var c = variableLeft.charAt(i);
-
+        if (!matcher.matches()) {
+            throw new VariableCouldNotBeParsedException("Regex could not parse the variable");
         }
 
-        // 3. Check one character back, this should be the numeric variable (ohlcv)
-        var numericValue = "c";
+        var letters = matcher.group(1);
+        var digits = matcher.group(2);
 
-        // 4. The beginning is the name of the function
-        var variableName = "";
-        // If nothing left, variableName == numericValue
+        // 3. The digits in teh end is the period
+        var period = parsePeriod(digits);
 
-        // Create and return FunctionContext
+        // 4. In the letters there can be a numeric value (ohlcv) as the last letter
+        //   - if so parse it out and the variableName is what is left
+        //   - otherwise the variable name is all the letters and teh numeric value is set to empty string
+        var variableName = letters;
+        var numericValue = "";
+        var lastChar = String.valueOf(letters.charAt(letters.length() - 1));
+        if (isOHLCV(lastChar)) {
+            numericValue = lastChar;
+            variableName = letters.substring(0, letters.length() - 1);
+        }
+
+        // 5. Create and return FunctionContext
         return new FunctionContext(variable, variableName, numericValue, period, fromDaysAgo);
+    }
+
+    private boolean isOHLCV(final String lastChar) {
+        return Arrays.stream(OHLCV.values()).sequential()
+            .map(OHLCV::getName)
+            .anyMatch(p -> p.equals(lastChar));
+    }
+
+    private int parsePeriod(final String digits) {
+        if (!digits.trim().isEmpty()) {
+            return NumberUtils.toInt(digits);
+        }
+
+        return 0;
     }
 }
