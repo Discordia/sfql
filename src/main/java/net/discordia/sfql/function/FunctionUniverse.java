@@ -41,8 +41,8 @@ public class FunctionUniverse {
         var volumeFunction = new OhlcvSFQLFunction(OHLCV.VOLUME);
         functions.put(volumeFunction.getKey(), volumeFunction);
 
-        var XavgFunction = new XavgSFQLFunction();
-        functions.put(XavgFunction.getKey(), XavgFunction);
+        var xavgFunction = new XavgSFQLFunction();
+        functions.put(xavgFunction.getKey(), xavgFunction);
     }
 
     public SFQLFunction getFunction(final String key) {
