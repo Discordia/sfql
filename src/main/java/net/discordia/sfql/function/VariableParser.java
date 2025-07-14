@@ -19,7 +19,7 @@ public class VariableParser {
     public FunctionContext parse(String variable) {
         // If is number just return a number function
         if (NumberUtils.isParsable(variable)) {
-            return new FunctionContext(variable, "digit", "digit", 0, 0);
+            return new FunctionContext(variable, "digit", variable, 0, 0);
         }
 
         //
@@ -52,6 +52,10 @@ public class VariableParser {
         if (isOHLCV(lastChar)) {
             numericValue = lastChar;
             variableName = letters.substring(0, letters.length() - 1);
+        }
+
+        if (variableName.isEmpty()) {
+            variableName = numericValue;
         }
 
         // 5. Create and return FunctionContext

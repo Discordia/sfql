@@ -3,12 +3,7 @@ package net.discordia.sfql.function;
 import java.util.HashMap;
 import java.util.Map;
 import net.discordia.sfql.domain.OHLCV;
-import net.discordia.sfql.function.functions.AdrSFQLFunction;
-import net.discordia.sfql.function.functions.AtrSFQLFunction;
-import net.discordia.sfql.function.functions.AvgSFQLFunction;
-import net.discordia.sfql.function.functions.NumberSFQLFunction;
-import net.discordia.sfql.function.functions.OhlcvSFQLFunction;
-import net.discordia.sfql.function.functions.XavgSFQLFunction;
+import net.discordia.sfql.function.functions.*;
 
 public class FunctionUniverse {
     private final Map<String, SFQLFunction> functions = new HashMap<>();
@@ -22,6 +17,12 @@ public class FunctionUniverse {
 
         var avgFunction = new AvgSFQLFunction();
         functions.put(avgFunction.getKey(), avgFunction);
+
+        var maxFunction = new MaxSFQLFunction();
+        functions.put(maxFunction.getKey(), maxFunction);
+
+        var minFunction = new MinSFQLFunction();
+        functions.put(minFunction.getKey(), minFunction);
 
         var numberFunction = new NumberSFQLFunction();
         functions.put(numberFunction.getKey(), numberFunction);

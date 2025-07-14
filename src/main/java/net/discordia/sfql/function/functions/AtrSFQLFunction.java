@@ -21,21 +21,26 @@ public class AtrSFQLFunction implements SFQLFunction {
         var period = context.period();
         var fromDaysAgo = context.fromDaysAgo();
 
-        var atr = calculateATR(stockFrame, period, fromDaysAgo);
-        return Optional.of(atr);
+        return calculateATR(stockFrame, period, fromDaysAgo);
     }
 
-    private BigDecimal calculateATR(final StockFrame stockFrame, int period, int fromDaysAgo) {
+    // TODO: double check ATR calculations
+    private Optional<BigDecimal> calculateATR(final StockFrame stockFrame, int period, int fromDaysAgo) {
         LinkedList<BigDecimal> trValues = new LinkedList<>();
         LinkedList<StockDataEntry> atrEntries = new LinkedList<>();
         for (int i = fromDaysAgo; i < Math.min(fromDaysAgo + period + 1, stockFrame.size()); i++) {
-            atrEntries.push(stockFrame.getEntry(i));
+            var dataEntry = stockFrame.getEntry(i);
+            if (dataEntry.isEmpty()) {
+                return Optional.empty();
+            }
+
+            atrEntries.push(dataEntry.get());
         }
 
         var atr = new BigDecimal(0);
         for (int i = 0; i < atrEntries.size(); i++) {
-            var tr = new BigDecimal(stockFrame.getEntry(i).high())
-                .subtract(new BigDecimal(stockFrame.getEntry(i).low()));
+            var tr = new BigDecimal(stockFrame.getEntry(i).get().high())
+                .subtract(new BigDecimal(stockFrame.getEntry(i).get().low()));
 
             if (i < period) {
                 trValues.add(tr);
@@ -59,6 +64,6 @@ public class AtrSFQLFunction implements SFQLFunction {
             }
         }
 
-        return atr;
+        return Optional.of(atr);
     }
 }

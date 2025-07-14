@@ -12,6 +12,7 @@ import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 import static java.math.RoundingMode.HALF_UP;
+import static net.discordia.sfql.function.functions.FunctionUtil.getAvgResultScale;
 
 public class XavgSFQLFunction implements SFQLFunction {
     @Override
@@ -24,7 +25,7 @@ public class XavgSFQLFunction implements SFQLFunction {
         var entries = stockFrame.getEntries();
         var period = context.period();
         var fromDaysAgo = context.fromDaysAgo();
-        var source = OHLCV.valueOf(context.numericValue());
+        var source = OHLCV.fromName(context.numericValue());
         var ema = calculateEMA(entries, period, source);
         // TODO: cache EMA
 
@@ -40,9 +41,11 @@ public class XavgSFQLFunction implements SFQLFunction {
             return List.of();
         }
 
+        var scale = getAvgResultScale(source);
+
         var avgAcc = BigDecimal.ZERO;
         for (int i = entries.size() - 1; i >= entries.size() - period; i--) {
-            avgAcc = avgAcc.add(new BigDecimal(source.from(entries.get(i))));
+            avgAcc = avgAcc.add(new BigDecimal(source.fromEntry(entries.get(i))));
         }
 
         List<DateValue> result = new ArrayList<>();
@@ -53,10 +56,10 @@ public class XavgSFQLFunction implements SFQLFunction {
         var multiplier = BigDecimal.valueOf(2).divide(BigDecimal.valueOf(period + 1), 4, HALF_UP);
         for (int i = entries.size() - (period + 1); i >= 0; i--) {
             var entry = entries.get(i);
-            var v = new BigDecimal(source.from(entry));
+            var v = new BigDecimal(source.fromEntry(entry));
             var vMinusPrev = v.subtract(previousEMA);
             var withMultiplier = vMinusPrev.multiply(multiplier);
-            var ema = withMultiplier.add(previousEMA).setScale(4, HALF_UP);
+            var ema = withMultiplier.add(previousEMA).setScale(scale, HALF_UP);
             result.add(new DateValue(entry.datetime().toLocalDate(), ema));
             previousEMA = ema;
         }

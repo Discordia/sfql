@@ -13,11 +13,21 @@ public enum OHLCV {
         this.name = name;
     }
 
+    public static OHLCV fromName(String name) {
+        for (OHLCV value : values()) {
+            if (value.getName().equals(name)) {
+                return value;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown OHLCV name: " + name);
+    }
+
     public String getName() {
         return name;
     }
 
-    public String from(StockDataEntry entry) {
+    public String fromEntry(StockDataEntry entry) {
         if (this == OPEN) {
             return entry.open();
         } else if (this == HIGH) {

@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Stack;
 import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.domain.VariableUniverse;
+import net.discordia.sfql.parse.InvalidExpressionException;
+
 import static java.math.RoundingMode.HALF_UP;
 import static net.discordia.sfql.eval.EvalUtil.isNotNumber;
 import static net.discordia.sfql.eval.EvalUtil.isNotOperator;
 
-// TODO: fix all Optional.get in this class
 public class ReversePolishNotationEvaluator {
 
     public boolean eval(List<String> tokens, VariableLookup variableLookup) {
@@ -22,15 +23,15 @@ public class ReversePolishNotationEvaluator {
             if (!evalInternal(token, stack, variableLookup)) {
                 switch (token) {
                     case ">":
-                        x = variableLookup.lookup(stack.pop()).get();
-                        y = variableLookup.lookup(stack.pop()).get();
+                        x = lookupVariable(variableLookup, stack.pop());
+                        y = lookupVariable(variableLookup, stack.pop());
                         value = y.compareTo(x) > 0;
                         result = String.valueOf(value);
                         stack.push(result);
                         break;
                     case "<":
-                        x = variableLookup.lookup(stack.pop()).get();
-                        y = variableLookup.lookup(stack.pop()).get();
+                        x = lookupVariable(variableLookup, stack.pop());
+                        y = lookupVariable(variableLookup, stack.pop());
                         value = y.compareTo(x) < 0;
                         result = String.valueOf(value);
                         stack.push(result);
@@ -50,7 +51,7 @@ public class ReversePolishNotationEvaluator {
             evalInternal(token, stack, variableLookup);
         }
 
-        return new BigDecimal(stack.pop());
+        return variableLookup.lookup(stack.pop()).orElse(null);
     }
 
     public Boolean verify(final List<String> tokens, final VariableUniverse variableUniverse) {
@@ -75,29 +76,29 @@ public class ReversePolishNotationEvaluator {
         } else {
             switch (token) {
                 case "+":
-                    x = variableLookup.lookup(stack.pop()).get();
-                    y = variableLookup.lookup(stack.pop()).get();
+                    x = lookupVariable(variableLookup, stack.pop());
+                    y = lookupVariable(variableLookup, stack.pop());
                     value = x.add(y);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "-":
-                    x = variableLookup.lookup(stack.pop()).get();
-                    y = variableLookup.lookup(stack.pop()).get();
+                    x = lookupVariable(variableLookup, stack.pop());
+                    y = lookupVariable(variableLookup, stack.pop());
                     value = y.subtract(x);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "*":
-                    x = variableLookup.lookup(stack.pop()).get();
-                    y = variableLookup.lookup(stack.pop()).get();
+                    x = lookupVariable(variableLookup, stack.pop());
+                    y = lookupVariable(variableLookup, stack.pop());
                     value = x.multiply(y);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "/":
-                    x = variableLookup.lookup(stack.pop()).get();
-                    y = variableLookup.lookup(stack.pop()).get();
+                    x = lookupVariable(variableLookup, stack.pop());
+                    y = lookupVariable(variableLookup, stack.pop());
                     value = y.divide(x, 2, HALF_UP);
                     result = String.valueOf(value);
                     stack.push(result);
@@ -106,5 +107,10 @@ public class ReversePolishNotationEvaluator {
         }
 
         return false;
+    }
+
+    private static BigDecimal lookupVariable(VariableLookup variableLookup, String value) {
+        return variableLookup.lookup(value)
+                .orElseThrow(() -> new InvalidExpressionException("Failed to lookup value: " + value));
     }
 }

@@ -24,8 +24,13 @@ public class AdrSFQLFunction implements SFQLFunction {
 
         var accumulatedRange = BigDecimal.ZERO;
         for (int i = fromDaysAgo; i < (fromDaysAgo + period); i++) {
-            var entry = stockFrame.getEntry(i);
+            var dataEntry = stockFrame.getEntry(i);
 
+            if (dataEntry.isEmpty()) {
+                return Optional.empty();
+            }
+
+            var entry = dataEntry.get();
             var dailyRange = bigDecimal(entry.high()).divide(
                 bigDecimal(entry.low()),
                 ADR_DECIMAL_PLACES,
@@ -36,7 +41,7 @@ public class AdrSFQLFunction implements SFQLFunction {
 
         var avgRange = accumulatedRange.divide(bigDecimal(period), ADR_DECIMAL_PLACES, HALF_UP);
         var adrDecimal = avgRange.subtract(bigDecimal(1));
-        var adr = adrDecimal.multiply(bigDecimal(ONE_HUNDRED));
+        var adr = adrDecimal.multiply(bigDecimal(ONE_HUNDRED)).setScale(2, HALF_UP);
         return Optional.of(adr);
     }
 }

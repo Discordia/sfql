@@ -1,9 +1,8 @@
-package net.discordia.sfql;
+package net.discordia.sfql.domain;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import net.discordia.sfql.eval.FailedToLookupVariableException;
-import net.discordia.sfql.domain.VariableLookup;
+
 import static java.math.RoundingMode.HALF_UP;
 
 public class VariableLookupStub implements VariableLookup {

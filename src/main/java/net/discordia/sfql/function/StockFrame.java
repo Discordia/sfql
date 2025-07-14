@@ -19,16 +19,16 @@ public class StockFrame {
         return entries;
     }
 
-    public StockDataEntry getEntry(int fromDaysAgo) {
+    public Optional<StockDataEntry> getEntry(int fromDaysAgo) {
         final int index = fromDaysAgo + frameDaysBack;
         if (entries.size() <= index) {
-            throw new ArrayIndexOutOfBoundsException("index out of bounds");
+            return Optional.empty();
         }
 
-        return entries.get(index);
+        return Optional.of(entries.get(index));
     }
 
-    public Optional<BigDecimal> getOHLCV(OHLCV ohlcv, int fromDaysAgo) {
+    public Optional<BigDecimal> getEntry(OHLCV ohlcv, int fromDaysAgo) {
         int days = frameDaysBack + fromDaysAgo;
 
         if (entries.size() < (days + 1)) {
