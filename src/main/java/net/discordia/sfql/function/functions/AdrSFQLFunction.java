@@ -6,7 +6,7 @@ import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 import static java.math.RoundingMode.HALF_UP;
-import static net.discordia.sfql.util.BigMathUtils.bigDecimal;
+import static net.discordia.sfql.util.BigMathUtil.bigDecimal;
 
 public class AdrSFQLFunction implements SFQLFunction {
     private static final int ADR_DECIMAL_PLACES = 4;

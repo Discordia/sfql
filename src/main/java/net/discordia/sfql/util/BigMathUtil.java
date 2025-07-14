@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-public class BigMathUtils {
+public class BigMathUtil {
     public static final BigDecimal ONE_HUNDRED = new BigDecimal("100").setScale(5, RoundingMode.HALF_UP);
     public static final BigDecimal THOUSAND = new BigDecimal("1000").setScale(5, RoundingMode.HALF_UP);
     public static final BigDecimal MILLION = new BigDecimal("1000000").setScale(5, RoundingMode.HALF_UP);
