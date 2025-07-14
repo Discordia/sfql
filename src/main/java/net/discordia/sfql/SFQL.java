@@ -1,5 +1,7 @@
 package net.discordia.sfql;
 
+import java.math.BigDecimal;
+import java.util.Map;
 import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
@@ -45,8 +47,20 @@ public class SFQL {
      * @param variableLookup the variable lookup to find values for variables
      * @return true if expression evaluate to true with the provided variable lookup
      */
-    public boolean eval(String expr, VariableLookup variableLookup) {
+    public boolean evalLogic(String expr, VariableLookup variableLookup) {
         var evaluator = parser.parse(expr);
         return evaluator.eval(variableLookup);
+    }
+
+    /**
+     * Eval expression to value
+     *
+     * @param expr the expression to evaluate
+     * @param variableLookup the variable lookup to find values for variables
+     * @return the value of the expression
+     */
+    public BigDecimal evalValue(String expr, VariableLookup variableLookup) {
+        var evaluator = parser.parse(expr);
+        return BigDecimal.ZERO; // TODO: implement
     }
 }

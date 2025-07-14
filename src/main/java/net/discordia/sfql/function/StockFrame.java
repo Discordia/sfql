@@ -15,8 +15,21 @@ public class StockFrame {
         this.frameDaysBack = frameDaysBack;
     }
 
-    public Optional<BigDecimal> getOHLCV(OHLCV ohlcv, int period, int fromDaysAgo) {
-        int days = frameDaysBack + period + fromDaysAgo;
+    public List<StockDataEntry> getEntries() {
+        return entries;
+    }
+
+    public StockDataEntry getEntry(int fromDaysAgo) {
+        final int index = fromDaysAgo + frameDaysBack;
+        if (entries.size() <= index) {
+            throw new ArrayIndexOutOfBoundsException("index out of bounds");
+        }
+
+        return entries.get(index);
+    }
+
+    public Optional<BigDecimal> getOHLCV(OHLCV ohlcv, int fromDaysAgo) {
+        int days = frameDaysBack + fromDaysAgo;
 
         if (entries.size() < (days + 1)) {
             return Optional.empty();
@@ -34,6 +47,10 @@ public class StockFrame {
         }
 
         return Optional.of(result);
+    }
+
+    public int size() {
+        return entries.size() - frameDaysBack;
     }
 }
 

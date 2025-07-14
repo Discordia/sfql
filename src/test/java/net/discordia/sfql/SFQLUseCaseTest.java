@@ -18,7 +18,7 @@ public class SFQLUseCaseTest {
     public void testEvalComplexLogicalExpression() {
         String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR avgv10 > 200000) AND c + c > 10)";
         var sfql = new SFQL();
-        var result = sfql.eval(query, new VariableLookupStub());
+        var result = sfql.evalLogic(query, new VariableLookupStub());
         assertTrue(result);
     }
 
@@ -27,7 +27,7 @@ public class SFQLUseCaseTest {
     public void testEvalComplexLogicalExpressionWithPrefixMinus() {
         String query = "v > v1 AND ((o - c1) /c1) < -0.06";
         var sfql = new SFQL();
-        var result = sfql.eval(query, new VariableLookupStub());
+        var result = sfql.evalLogic(query, new VariableLookupStub());
         assertTrue(result);
     }
 

@@ -21,7 +21,7 @@ public class ValueSFQLFunction implements SFQLFunction {
     }
 
     @Override
-    public Optional<BigDecimal> apply(final StockFrame frame, final FunctionContext context) {
-        return frame.getOHLCV(ohlcv, context.period(), context.fromDaysAgo());
+    public Optional<BigDecimal> apply(final FunctionContext context, final StockFrame frame) {
+        return frame.getOHLCV(ohlcv, context.period() + context.fromDaysAgo());
     }
 }

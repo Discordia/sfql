@@ -5,5 +5,5 @@ import java.util.Optional;
 
 public interface SFQLFunction {
     String getKey();
-    Optional<BigDecimal> apply(final StockFrame stockFrame, final FunctionContext context);
+    Optional<BigDecimal> apply(final FunctionContext context, final StockFrame stockFrame);
 }
