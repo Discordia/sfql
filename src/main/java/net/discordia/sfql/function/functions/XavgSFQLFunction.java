@@ -26,7 +26,7 @@ public class XavgSFQLFunction implements SFQLFunction {
         var fromDaysAgo = context.fromDaysAgo();
         var source = OHLCV.valueOf(context.numericValue());
         var ema = calculateEMA(entries, period, source);
-        // TODO: cache ema
+        // TODO: cache EMA
 
         if (ema.size() < fromDaysAgo + 1) {
             return Optional.empty();

@@ -25,7 +25,6 @@ public class AtrSFQLFunction implements SFQLFunction {
         return Optional.of(atr);
     }
 
-
     private BigDecimal calculateATR(final StockFrame stockFrame, int period, int fromDaysAgo) {
         LinkedList<BigDecimal> trValues = new LinkedList<>();
         LinkedList<StockDataEntry> atrEntries = new LinkedList<>();
