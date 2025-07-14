@@ -9,6 +9,7 @@ import static java.math.RoundingMode.HALF_UP;
 import static net.discordia.sfql.eval.EvalUtil.isNotNumber;
 import static net.discordia.sfql.eval.EvalUtil.isNotOperator;
 
+// TODO: fix all Optional.get in this class
 public class ReversePolishNotationEvaluator {
 
     public boolean eval(List<String> tokens, VariableLookup variableLookup) {
@@ -21,20 +22,20 @@ public class ReversePolishNotationEvaluator {
             if (!evalInternal(token, stack, variableLookup)) {
                 switch (token) {
                     case ">":
-                        x = variableLookup.lookup(stack.pop());
-                        y = variableLookup.lookup(stack.pop());
+                        x = variableLookup.lookup(stack.pop()).get();
+                        y = variableLookup.lookup(stack.pop()).get();
                         value = y.compareTo(x) > 0;
                         result = String.valueOf(value);
                         stack.push(result);
                         break;
                     case "<":
-                        x = variableLookup.lookup(stack.pop());
-                        y = variableLookup.lookup(stack.pop());
+                        x = variableLookup.lookup(stack.pop()).get();
+                        y = variableLookup.lookup(stack.pop()).get();
                         value = y.compareTo(x) < 0;
                         result = String.valueOf(value);
                         stack.push(result);
                         break;
-                    // TODO: =  ???
+                    // TODO: "="  ?
                 }
             }
         }
@@ -74,29 +75,29 @@ public class ReversePolishNotationEvaluator {
         } else {
             switch (token) {
                 case "+":
-                    x = variableLookup.lookup(stack.pop());
-                    y = variableLookup.lookup(stack.pop());
+                    x = variableLookup.lookup(stack.pop()).get();
+                    y = variableLookup.lookup(stack.pop()).get();
                     value = x.add(y);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "-":
-                    x = variableLookup.lookup(stack.pop());
-                    y = variableLookup.lookup(stack.pop());
+                    x = variableLookup.lookup(stack.pop()).get();
+                    y = variableLookup.lookup(stack.pop()).get();
                     value = y.subtract(x);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "*":
-                    x = variableLookup.lookup(stack.pop());
-                    y = variableLookup.lookup(stack.pop());
+                    x = variableLookup.lookup(stack.pop()).get();
+                    y = variableLookup.lookup(stack.pop()).get();
                     value = x.multiply(y);
                     result = String.valueOf(value);
                     stack.push(result);
                     return true;
                 case "/":
-                    x = variableLookup.lookup(stack.pop());
-                    y = variableLookup.lookup(stack.pop());
+                    x = variableLookup.lookup(stack.pop()).get();
+                    y = variableLookup.lookup(stack.pop()).get();
                     value = y.divide(x, 2, HALF_UP);
                     result = String.valueOf(value);
                     stack.push(result);
