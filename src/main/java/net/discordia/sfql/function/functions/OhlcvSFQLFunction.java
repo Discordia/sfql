@@ -7,11 +7,10 @@ import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 
-// TODO: rename to something with ohlcv
-public class ValueSFQLFunction implements SFQLFunction {
+public class OhlcvSFQLFunction implements SFQLFunction {
     private final OHLCV ohlcv;
 
-    public ValueSFQLFunction(OHLCV ohlcv) {
+    public OhlcvSFQLFunction(OHLCV ohlcv) {
         this.ohlcv = ohlcv;
     }
 
