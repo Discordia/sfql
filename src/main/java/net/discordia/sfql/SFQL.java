@@ -61,6 +61,6 @@ public class SFQL {
      */
     public BigDecimal evalValue(String expr, VariableLookup variableLookup) {
         var evaluator = parser.parse(expr);
-        return BigDecimal.ZERO; // TODO: implement
+        return evaluator.evalValue(variableLookup);
     }
 }

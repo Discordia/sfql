@@ -1,5 +1,6 @@
 package net.discordia.sfql.eval;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,15 @@ public class LogicReversePolishNotationEvaluator {
         }
 
         return stack.pop();
+    }
+
+    public BigDecimal evalValue(final VariableLookup variableLookup) {
+        var eval = new ReversePolishNotationEvaluator();
+        if (expr.size() > 1) {
+            throw new InvalidExpressionException("Invalid value expression");
+        }
+
+        return eval.evalValue(expr.get(0), variableLookup);
     }
 
     public boolean verify(VariableUniverse variableUniverse) {

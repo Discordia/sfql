@@ -1,5 +1,6 @@
 package net.discordia.sfql;
 
+import java.math.BigDecimal;
 import net.discordia.sfql.domain.ReducedVariableUniverse;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
 import org.junit.jupiter.api.Test;
@@ -79,5 +80,25 @@ public class SFQLUseCaseTest {
         var eval = new SFQL();
         var result = eval.reduceToDefaultQuery(query, ReducedVariableUniverse.create());
         System.out.println(result);
+    }
+
+    //
+    // Eval value
+    //
+
+    @Test
+    public void testEvalValue() {
+        String query = "c + 1";
+        var sfql = new SFQL();
+        var result = sfql.evalValue(query, new VariableLookupStub());
+        assertThat(result).isEqualTo(new BigDecimal("101.00"));
+    }
+
+    @Test
+    public void testEvalValuePercentFromOpen() {
+        String query = "((c - o) / o)";
+        var sfql = new SFQL();
+        var result = sfql.evalValue(query, new VariableLookupStub());
+        assertThat(result).isEqualTo(new BigDecimal("0.11"));
     }
 }

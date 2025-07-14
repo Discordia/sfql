@@ -42,6 +42,16 @@ public class ReversePolishNotationEvaluator {
         return Boolean.parseBoolean(stack.pop());
     }
 
+    public BigDecimal evalValue(List<String> tokens, VariableLookup variableLookup) {
+        var stack = new Stack<String>();
+
+        for (final String token : tokens) {
+            evalInternal(token, stack, variableLookup);
+        }
+
+        return new BigDecimal(stack.pop());
+    }
+
     public Boolean verify(final List<String> tokens, final VariableUniverse variableUniverse) {
         for (String token : tokens) {
             if (isNotOperator(token) && isNotNumber(token)) {
