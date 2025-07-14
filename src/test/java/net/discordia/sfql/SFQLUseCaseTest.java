@@ -1,5 +1,6 @@
 package net.discordia.sfql;
 
+import java.math.BigDecimal;
 import net.discordia.sfql.domain.ReducedVariableUniverse;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SFQLUseCaseTests {
+public class SFQLUseCaseTest {
 
     //
     // Eval
@@ -18,7 +19,7 @@ public class SFQLUseCaseTests {
     public void testEvalComplexLogicalExpression() {
         String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR avgv10 > 200000) AND c + c > 10)";
         var sfql = new SFQL();
-        var result = sfql.eval(query, new VariableLookupStub());
+        var result = sfql.evalLogic(query, new VariableLookupStub());
         assertTrue(result);
     }
 
@@ -27,7 +28,7 @@ public class SFQLUseCaseTests {
     public void testEvalComplexLogicalExpressionWithPrefixMinus() {
         String query = "v > v1 AND ((o - c1) /c1) < -0.06";
         var sfql = new SFQL();
-        var result = sfql.eval(query, new VariableLookupStub());
+        var result = sfql.evalLogic(query, new VariableLookupStub());
         assertTrue(result);
     }
 
@@ -79,5 +80,25 @@ public class SFQLUseCaseTests {
         var eval = new SFQL();
         var result = eval.reduceToDefaultQuery(query, ReducedVariableUniverse.create());
         System.out.println(result);
+    }
+
+    //
+    // Eval value
+    //
+
+    @Test
+    public void testEvalValue() {
+        String query = "c + 1";
+        var sfql = new SFQL();
+        var result = sfql.evalValue(query, new VariableLookupStub());
+        assertThat(result).isEqualTo(new BigDecimal("101.00"));
+    }
+
+    @Test
+    public void testEvalValuePercentFromOpen() {
+        String query = "((c - o) / o)";
+        var sfql = new SFQL();
+        var result = sfql.evalValue(query, new VariableLookupStub());
+        assertThat(result).isEqualTo(new BigDecimal("0.11"));
     }
 }

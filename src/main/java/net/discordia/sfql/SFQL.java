@@ -1,6 +1,10 @@
 package net.discordia.sfql;
 
-import net.discordia.sfql.eval.VariableLookup;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
 import net.discordia.sfql.domain.VariableUniverse;
@@ -45,8 +49,39 @@ public class SFQL {
      * @param variableLookup the variable lookup to find values for variables
      * @return true if expression evaluate to true with the provided variable lookup
      */
-    public boolean eval(String expr, VariableLookup variableLookup) {
+    public boolean evalLogic(String expr, VariableLookup variableLookup) {
         var evaluator = parser.parse(expr);
         return evaluator.eval(variableLookup);
+    }
+
+    /**
+     * Eval expression to value
+     *
+     * @param expr the expression to evaluate
+     * @param variableLookup the variable lookup to find values for variables
+     * @return the value of the expression
+     */
+    public BigDecimal evalValue(String expr, VariableLookup variableLookup) {
+        var evaluator = parser.parse(expr);
+        return evaluator.evalValue(variableLookup);
+    }
+
+    /**
+     * Eval multiple expressions to value
+     *
+     * @param exprs the expressions to evaluate
+     * @param variableLookup the variable lookup to find values for variables
+     * @return a map of expression to value of the expression
+     */
+    public Map<String, BigDecimal> evalValueMulti(Set<String> exprs, VariableLookup variableLookup) {
+        Map<String, BigDecimal> results = new HashMap<>();
+
+        for (String expr : exprs) {
+            var evaluator = parser.parse(expr);
+            var result = evaluator.evalValue(variableLookup);
+            results.put(expr, result);
+        }
+
+        return results;
     }
 }
