@@ -227,7 +227,6 @@ public class SFQLUseCaseTest {
         assertThat(result.get("h126")).isEqualTo(new BigDecimal("141.88"));
     }
 
-
     @Test
     public void testEvalValeOnAnyStockData() {
         var sfql = new SFQL();
@@ -240,17 +239,17 @@ public class SFQLUseCaseTest {
 
         assertThat(result.get("maxc126")).isEqualTo(new BigDecimal("1.09"));
         assertThat(result.get("h94")).isEqualTo(new BigDecimal("0.6735"));
-        assertThat(result.get("avgc10")).isEqualTo(new BigDecimal("0.6400"));
+        assertThat(result.get("avgc10")).isEqualTo(new BigDecimal("0.6406"));
         assertThat(result.get("l94")).isEqualTo(new BigDecimal("0.6019"));
-        assertThat(result.get("avgc7")).isEqualTo(new BigDecimal("0.6600"));
-        assertThat(result.get("avgc185")).isEqualTo(new BigDecimal("0.8400"));
+        assertThat(result.get("avgc7")).isEqualTo(new BigDecimal("0.6552"));
+        assertThat(result.get("avgc185")).isEqualTo(new BigDecimal("0.8379"));
         assertThat(result.get("minl94")).isEqualTo(new BigDecimal("0.3610"));
         assertThat(result.get("maxh94")).isEqualTo(new BigDecimal("1.04"));
         assertThat(result.get("avgv252")).isEqualTo(new BigDecimal("583556"));
         assertThat(result.get("atr21")).isEqualTo(new BigDecimal("0.07"));
         assertThat(result.get("maxh252")).isEqualTo(new BigDecimal("1.90"));
         assertThat(result.get("avgv21")).isEqualTo(new BigDecimal("1095317"));
-        assertThat(result.get("avgc50")).isEqualTo(new BigDecimal("0.7000"));
+        assertThat(result.get("avgc50")).isEqualTo(new BigDecimal("0.7027"));
         assertThat(result.get("c504")).isEqualTo(new BigDecimal("2.61"));
         assertThat(result.get("maxh5")).isEqualTo(new BigDecimal("0.8500"));
         assertThat(result.get("c252")).isEqualTo(new BigDecimal("1.02"));
@@ -270,7 +269,7 @@ public class SFQLUseCaseTest {
         assertThat(result.get("c1")).isEqualTo(new BigDecimal("0.7619"));
         assertThat(result.get("c2")).isEqualTo(new BigDecimal("0.7000"));
         assertThat(result.get("c3")).isEqualTo(new BigDecimal("0.6461"));
-        assertThat(result.get("avgc200")).isEqualTo(new BigDecimal("0.8400"));
+        assertThat(result.get("avgc200")).isEqualTo(new BigDecimal("0.8425"));
         assertThat(result.get("minc252")).isEqualTo(new BigDecimal("0.3970"));
         assertThat(result.get("c5")).isEqualTo(new BigDecimal("0.6070"));
         assertThat(result.get("o252")).isEqualTo(new BigDecimal("1.04"));
@@ -300,15 +299,15 @@ public class SFQLUseCaseTest {
         assertThat(result.get("minc94")).isEqualTo(new BigDecimal("0.3970"));
         assertThat(result.get("c126")).isEqualTo(new BigDecimal("1.09"));
         assertThat(result.get("c63")).isEqualTo(new BigDecimal("0.4590"));
-        assertThat(result.get("avgc25")).isEqualTo(new BigDecimal("0.6400"));
+        assertThat(result.get("avgc25")).isEqualTo(new BigDecimal("0.6403"));
         assertThat(result.get("minl21")).isEqualTo(new BigDecimal("0.5200"));
         assertThat(result.get("c")).isEqualTo(new BigDecimal("0.6552"));
         assertThat(result.get("c21")).isEqualTo(new BigDecimal("0.7229"));
-        assertThat(result.get("avgc65")).isEqualTo(new BigDecimal("0.6600"));
+        assertThat(result.get("avgc65")).isEqualTo(new BigDecimal("0.6569"));
         assertThat(result.get("h")).isEqualTo(new BigDecimal("0.7538"));
         assertThat(result.get("xavgc21")).isEqualTo(new BigDecimal("0.6506"));
         assertThat(result.get("maxh126")).isEqualTo(new BigDecimal("1.12"));
-        assertThat(result.get("avgc150")).isEqualTo(new BigDecimal("0.7400"));
+        assertThat(result.get("avgc150")).isEqualTo(new BigDecimal("0.7409"));
         assertThat(result.get("l")).isEqualTo(new BigDecimal("0.6000"));
         assertThat(result.get("minl63")).isEqualTo(new BigDecimal("0.4311"));
         assertThat(result.get("o63")).isEqualTo(new BigDecimal("0.4400"));
@@ -316,13 +315,13 @@ public class SFQLUseCaseTest {
         assertThat(result.get("o21")).isEqualTo(new BigDecimal("0.7500"));
         assertThat(result.get("minl126")).isEqualTo(new BigDecimal("0.3610"));
         assertThat(result.get("maxc21")).isEqualTo(new BigDecimal("0.7619"));
-        assertThat(result.get("avgc100")).isEqualTo(new BigDecimal("0.6100"));
+        assertThat(result.get("avgc100")).isEqualTo(new BigDecimal("0.6114"));
         assertThat(result.get("maxc63")).isEqualTo(new BigDecimal("0.9118"));
         assertThat(result.get("minc150")).isEqualTo(new BigDecimal("0.3970"));
         assertThat(result.get("xavgh4")).isEqualTo(new BigDecimal("0.7680"));
         assertThat(result.get("v")).isEqualTo(new BigDecimal("2065997"));
         assertThat(result.get("l126")).isEqualTo(new BigDecimal("1.03"));
-        assertThat(result.get("avgc20")).isEqualTo(new BigDecimal("0.6200"));
+        assertThat(result.get("avgc20")).isEqualTo(new BigDecimal("0.6167"));
         assertThat(result.get("v1")).isEqualTo(new BigDecimal("3864754"));
         assertThat(result.get("maxc150")).isEqualTo(new BigDecimal("1.52"));
         assertThat(result.get("v2")).isEqualTo(new BigDecimal("6631183"));

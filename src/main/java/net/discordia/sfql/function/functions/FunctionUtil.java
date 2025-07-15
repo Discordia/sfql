@@ -5,14 +5,6 @@ import java.math.RoundingMode;
 import net.discordia.sfql.domain.OHLCV;
 
 public class FunctionUtil {
-    public static int decimalPlaces(OHLCV source) {
-        if (source == OHLCV.VOLUME) {
-            return 0;
-        }
-
-        return 2;
-    }
-
     public static BigDecimal formatOHLCV(BigDecimal value, OHLCV ohlcv) {
         if (ohlcv == OHLCV.VOLUME) {
             return value.setScale(0, RoundingMode.HALF_UP);
@@ -28,16 +20,24 @@ public class FunctionUtil {
     }
 
     public static BigDecimal divideOHLCV(OHLCV source, BigDecimal value, BigDecimal divisor) {
-        var decimalPlaces = decimalPlaces(source);
-        var roundingMode = roundingMode(source);
+        var decimalPlaces = decimalPlacesDivide(source);
+        var roundingMode = roundingModeDivide(source);
         return formatOHLCV(value.divide(divisor, decimalPlaces, roundingMode), source);
     }
 
-    public static RoundingMode roundingMode(OHLCV source) {
+    private static RoundingMode roundingModeDivide(OHLCV source) {
         if (source == OHLCV.VOLUME) {
             return RoundingMode.DOWN;
         }
 
         return RoundingMode.HALF_UP;
+    }
+
+    private static int decimalPlacesDivide(OHLCV source) {
+        if (source == OHLCV.VOLUME) {
+            return 0;
+        }
+
+        return 5;
     }
 }
