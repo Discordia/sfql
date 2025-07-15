@@ -8,7 +8,6 @@ import net.discordia.sfql.function.StockFrame;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-// TODO: make all functions handle when not enough entries cna be found
 public class MinSFQLFunction implements SFQLFunction {
     @Override
     public String getKey() {

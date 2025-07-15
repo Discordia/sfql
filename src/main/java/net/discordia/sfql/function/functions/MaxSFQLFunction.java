@@ -8,6 +8,8 @@ import net.discordia.sfql.function.StockFrame;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+// TODO: Decide on how to handle minc1
+//  - is that min of index 0 and 1 or just index 0?
 public class MaxSFQLFunction implements SFQLFunction {
     @Override
     public String getKey() {

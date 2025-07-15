@@ -6,7 +6,6 @@ import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 import static java.math.RoundingMode.HALF_UP;
-import static net.discordia.sfql.util.BigMathUtil.bigDecimal;
 
 public class AdrSFQLFunction implements SFQLFunction {
     private static final int ADR_DECIMAL_PLACES = 4;
@@ -31,17 +30,17 @@ public class AdrSFQLFunction implements SFQLFunction {
             }
 
             var entry = dataEntry.get();
-            var dailyRange = bigDecimal(entry.high()).divide(
-                bigDecimal(entry.low()),
+            var dailyRange = new BigDecimal(entry.high()).divide(
+                new BigDecimal(entry.low()),
                 ADR_DECIMAL_PLACES,
                 HALF_UP
             );
             accumulatedRange = accumulatedRange.add(dailyRange);
         }
 
-        var avgRange = accumulatedRange.divide(bigDecimal(period), ADR_DECIMAL_PLACES, HALF_UP);
-        var adrDecimal = avgRange.subtract(bigDecimal(1));
-        var adr = adrDecimal.multiply(bigDecimal(ONE_HUNDRED)).setScale(2, HALF_UP);
+        var avgRange = accumulatedRange.divide(new BigDecimal(period), ADR_DECIMAL_PLACES, HALF_UP);
+        var adrDecimal = avgRange.subtract(new BigDecimal(1));
+        var adr = adrDecimal.multiply(new BigDecimal(ONE_HUNDRED)).setScale(2, HALF_UP);
         return Optional.of(adr);
     }
 }

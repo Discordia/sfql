@@ -1,7 +1,6 @@
 package net.discordia.sfql;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 import net.discordia.sfql.domain.DefaultVariables;
 import net.discordia.sfql.domain.ReducedVariableUniverse;
@@ -127,7 +126,7 @@ public class SFQLUseCaseTest {
     }
 
     @Test
-    public void testEvalVAleOnArmStockData() {
+    public void testEvalValeOnArmStockData() {
         var sfql = new SFQL();
 
         var armData = StockDataLoader.load("arm.json");
@@ -178,7 +177,7 @@ public class SFQLUseCaseTest {
         assertThat(result.get("maxc5")).isEqualTo(new BigDecimal("148.55"));
         assertThat(result.get("c94")).isEqualTo(new BigDecimal("136.70"));
         assertThat(result.get("minl252")).isEqualTo(new BigDecimal("80.00"));
-        assertThat(result.get("xavgc9")).isEqualTo(new BigDecimal("149.85"));
+        assertThat(result.get("xavgc9")).isEqualTo(new BigDecimal("149.86"));
         assertThat(result.get("l1")).isEqualTo(new BigDecimal("145.62"));
         assertThat(result.get("l2")).isEqualTo(new BigDecimal("147.80"));
         assertThat(result.get("l3")).isEqualTo(new BigDecimal("147.05"));
@@ -204,7 +203,7 @@ public class SFQLUseCaseTest {
         assertThat(result.get("c21")).isEqualTo(new BigDecimal("140.63"));
         assertThat(result.get("avgc65")).isEqualTo(new BigDecimal("129.38"));
         assertThat(result.get("h")).isEqualTo(new BigDecimal("151.10"));
-        assertThat(result.get("xavgc21")).isEqualTo(new BigDecimal("147.87"));
+        assertThat(result.get("xavgc21")).isEqualTo(new BigDecimal("147.86"));
         assertThat(result.get("maxh126")).isEqualTo(new BigDecimal("182.88"));
         assertThat(result.get("avgc150")).isEqualTo(new BigDecimal("133.35"));
         assertThat(result.get("l")).isEqualTo(new BigDecimal("144.28"));

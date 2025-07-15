@@ -33,15 +33,14 @@ public class XavgSFQLFunction implements SFQLFunction {
             return Optional.empty();
         }
 
-        return Optional.of(ema.get(fromDaysAgo).value());
+        var scale = getAvgResultScale(source);
+        return Optional.of(ema.get(fromDaysAgo).value().setScale(scale, HALF_UP));
     }
 
     private List<DateValue> calculateEMA(final List<StockDataEntry> entries, final int period, OHLCV source) {
         if (entries.size() < period) {
             return List.of();
         }
-
-        var scale = getAvgResultScale(source);
 
         var avgAcc = BigDecimal.ZERO;
         for (int i = entries.size() - 1; i >= entries.size() - period; i--) {
@@ -59,7 +58,7 @@ public class XavgSFQLFunction implements SFQLFunction {
             var v = new BigDecimal(source.fromEntry(entry));
             var vMinusPrev = v.subtract(previousEMA);
             var withMultiplier = vMinusPrev.multiply(multiplier);
-            var ema = withMultiplier.add(previousEMA).setScale(scale, HALF_UP);
+            var ema = withMultiplier.add(previousEMA).setScale(4, HALF_UP);
             result.add(new DateValue(entry.datetime().toLocalDate(), ema));
             previousEMA = ema;
         }
