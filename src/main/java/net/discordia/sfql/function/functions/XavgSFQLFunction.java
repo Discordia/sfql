@@ -12,7 +12,7 @@ import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 import static java.math.RoundingMode.HALF_UP;
-import static net.discordia.sfql.function.functions.FunctionUtil.getAvgResultScale;
+import static net.discordia.sfql.function.functions.FunctionUtil.formatOHLCV;
 
 public class XavgSFQLFunction implements SFQLFunction {
     @Override
@@ -33,8 +33,8 @@ public class XavgSFQLFunction implements SFQLFunction {
             return Optional.empty();
         }
 
-        var scale = getAvgResultScale(source);
-        return Optional.of(ema.get(fromDaysAgo).value().setScale(scale, HALF_UP));
+        var emaValue = formatOHLCV(ema.get(fromDaysAgo).value(), source);
+        return Optional.of(emaValue);
     }
 
     private List<DateValue> calculateEMA(final List<StockDataEntry> entries, final int period, OHLCV source) {

@@ -1,14 +1,13 @@
 package net.discordia.sfql.function.functions;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 import net.discordia.sfql.domain.OHLCV;
 import net.discordia.sfql.function.FunctionContext;
 import net.discordia.sfql.function.SFQLFunction;
 import net.discordia.sfql.function.StockFrame;
 
-import static net.discordia.sfql.function.functions.FunctionUtil.getAvgResultScale;
+import static net.discordia.sfql.function.functions.FunctionUtil.divideOHLCV;
 
 public class AvgSFQLFunction implements SFQLFunction {
     @Override
@@ -19,11 +18,11 @@ public class AvgSFQLFunction implements SFQLFunction {
     @Override
     public Optional<BigDecimal> apply(final FunctionContext context, final StockFrame stockFrame) {
         var period = context.period();
-        var ohlcv = OHLCV.fromName(context.numericValue());
+        var source = OHLCV.fromName(context.numericValue());
 
         var sum = BigDecimal.ZERO;
         for (int i = 0; i < period; i++) {
-            var entry = stockFrame.getEntry(ohlcv, context.fromDaysAgo() + i);
+            var entry = stockFrame.getEntry(source, context.fromDaysAgo() + i);
             if (entry.isEmpty()) {
                 return Optional.empty();
             }
@@ -31,9 +30,7 @@ public class AvgSFQLFunction implements SFQLFunction {
             sum = sum.add(entry.get());
         }
 
-        var scale = getAvgResultScale(ohlcv);
-        var result = sum.divide(BigDecimal.valueOf(period), 2, RoundingMode.HALF_UP)
-                .setScale(scale, RoundingMode.HALF_UP);
+        var result = divideOHLCV(source, sum, BigDecimal.valueOf(period));
         return Optional.of(result);
     }
 }
