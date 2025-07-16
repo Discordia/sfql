@@ -1,5 +1,6 @@
 package net.discordia.sfql.eval;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -54,7 +55,7 @@ public class ReducedExpr {
             }
         }
 
-        return new ReducedQuery(stack.pop(), unknownVariables);
+        return new ReducedQuery(stack.pop(), new HashSet<>(unknownVariables));
     }
 
     private static String createAndExpr(final String left, final String right) {
