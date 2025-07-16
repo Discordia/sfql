@@ -2,6 +2,7 @@ package net.discordia.sfql.eval;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -67,7 +68,7 @@ public class LogicReversePolishNotationEvaluator {
         for (List<String> tokens : expr) {
             if (isNotLogicalOperator(tokens)) {
                 var result = eval.verify(tokens, variableUniverse);
-                results.add(result);
+                results.add(result == null);
             } else if (!isAnd(tokens) && !isOr(tokens)) {
                 return false;
             }
@@ -76,15 +77,18 @@ public class LogicReversePolishNotationEvaluator {
         return results.stream().allMatch(p -> p == true);
     }
 
-    public InfixExpr reduce(VariableUniverse variableUniverse) {
+    public ReducedExpr reduce(VariableUniverse variableUniverse) {
         var eval = new ReversePolishNotationEvaluator();
-       List<List<String>> reduced = new ArrayList<>();
+        List<List<String>> reduced = new ArrayList<>();
+        Set<String> unknownVariables = new HashSet<>();
 
         for (List<String> tokens : expr) {
             if (isNotLogicalOperator(tokens)) {
-                if (eval.verify(tokens, variableUniverse)) {
+                var result = eval.verify(tokens, variableUniverse);
+                if (result == null) {
                     reduced.add(tokens);
                 } else {
+                    unknownVariables.add(result);
                     reduced.add(List.of("invalid"));
                 }
             } else if (isAnd(tokens) || isOr(tokens)) {
@@ -94,6 +98,6 @@ public class LogicReversePolishNotationEvaluator {
             }
         }
 
-        return new InfixExpr(reduced);
+        return new ReducedExpr(reduced, unknownVariables);
     }
 }

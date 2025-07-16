@@ -54,16 +54,16 @@ public class ReversePolishNotationEvaluator {
         return variableLookup.lookup(stack.pop()).orElse(null);
     }
 
-    public Boolean verify(final List<String> tokens, final VariableUniverse variableUniverse) {
+    public String verify(final List<String> tokens, final VariableUniverse variableUniverse) {
         for (String token : tokens) {
             if (isNotOperator(token) && isNotNumber(token)) {
                 if (!variableUniverse.contains(token)) {
-                    return false;
+                    return token;
                 }
             }
         }
 
-        return true;
+        return null;
     }
 
     private boolean evalInternal(String token, Stack<String> stack, VariableLookup variableLookup) {

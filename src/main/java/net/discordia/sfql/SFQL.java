@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import net.discordia.sfql.domain.ReducedQuery;
 import net.discordia.sfql.domain.VariableLookup;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import net.discordia.sfql.parse.LogicShuntingYardParser;
@@ -36,10 +37,10 @@ public class SFQL {
      * @param variableUniverse the supported variables
      * @return the reduced expression
      */
-    public String reduceToDefaultQuery(String expr, VariableUniverse variableUniverse) {
+    public ReducedQuery reduceToDefaultQuery(String expr, VariableUniverse variableUniverse) {
         var evaluator = parser.parse(expr);
-        var infixExpr = evaluator.reduce(variableUniverse);
-        return infixExpr.toInfixString();
+        var reducedExpr = evaluator.reduce(variableUniverse);
+        return reducedExpr.toReducedQuery();
     }
 
     /**

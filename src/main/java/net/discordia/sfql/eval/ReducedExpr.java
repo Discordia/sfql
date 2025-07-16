@@ -1,7 +1,9 @@
 package net.discordia.sfql.eval;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
+import net.discordia.sfql.domain.ReducedQuery;
 import net.discordia.sfql.parse.InvalidExpressionException;
 import static net.discordia.sfql.eval.EvalUtil.isAnd;
 import static net.discordia.sfql.eval.EvalUtil.isInvalid;
@@ -9,7 +11,7 @@ import static net.discordia.sfql.eval.EvalUtil.isNotLogicalOperator;
 import static net.discordia.sfql.eval.EvalUtil.isNotOperator;
 import static net.discordia.sfql.eval.EvalUtil.isOr;
 
-public class InfixExpr {
+public class ReducedExpr {
     private static final String AND_EXPR = "(%s AND %s)";
     private static final String OR_EXPR = "(%s OR %s)";
     private static final String GT_EXPR = "(%s > %s)";
@@ -21,12 +23,14 @@ public class InfixExpr {
     private static final String SINGLE_EXPR = "(%s)";
 
     private final List<List<String>> expr;
+    private final Set<String> unknownVariables;
 
-    public InfixExpr(final List<List<String>> expr) {
+    public ReducedExpr(final List<List<String>> expr, final Set<String> unknownVariables) {
         this.expr = expr;
+        this.unknownVariables = unknownVariables;
     }
 
-    public String toInfixString() {
+    public ReducedQuery toReducedQuery() {
         Stack<String> stack = new Stack<>();
 
         for (List<String> tokens : expr) {
@@ -50,7 +54,7 @@ public class InfixExpr {
             }
         }
 
-        return stack.pop();
+        return new ReducedQuery(stack.pop(), unknownVariables);
     }
 
     private static String createAndExpr(final String left, final String right) {

@@ -102,7 +102,8 @@ public class SFQLUseCaseTest {
         String query = "(c + 1 > (h1 + 2)) AND ((v > v1 OR ph > 200000) AND c + c > 10)";
         var eval = new SFQL();
         var result = eval.reduceToDefaultQuery(query, ReducedVariableUniverse.create());
-        assertThat(result).isEqualTo("(((c + 1) > (h1 + 2)) AND (((v > v1)) AND ((c + c) > 10)))");
+        assertThat(result.resultQuery()).isEqualTo("(((c + 1) > (h1 + 2)) AND (((v > v1)) AND ((c + c) > 10)))");
+        assertThat(result.unknownVariables()).containsExactly("ph");
     }
 
     //
